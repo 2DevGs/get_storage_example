@@ -9,9 +9,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  final storage = GetStorage();
+  late final VoidCallback listen;
+
+  @override
+  void initState() {
+    listen = storage.listen(() {
+      debugPrint('O Storage foi alterado!!!!');
+    });
+    storage.listenKey('nameKey', (value) {
+      debugPrint('Chave nameKey Alterada $value');
+    });
+    super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    listen();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var nome = GetStorage().read('nameKey') ?? '';
+    var nome = storage.read('nameKey') ?? '';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -23,12 +45,27 @@ class _HomePageState extends State<HomePage> {
             Text(nome),
             ElevatedButton(
               onPressed: () {
-                GetStorage().write('nameKey', 'Gustavo Dias');
+                storage.write('nameKey', 'Gustavo Dias');
                 setState(() {
                   
                 });
               },
               child: const Text('Gravar nome'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                storage.remove('nameKey');
+                setState(() {
+                  
+                });
+              },
+              child: const Text('Remover nome'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                listen();
+              },
+              child: const Text('Remover Listen'),
             ),
           ],
         ),
