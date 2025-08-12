@@ -11,6 +11,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   final storage = GetStorage();
+  final storageGetX = GetStorage('JornadaGetX');
   late final VoidCallback listen;
 
   @override
@@ -34,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var nome = storage.read('nameKey') ?? '';
+    var nomeGetX = storageGetX.read('nameKey') ?? '';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -61,12 +63,31 @@ class _HomePageState extends State<HomePage> {
               },
               child: const Text('Remover nome'),
             ),
+            Text('Get: $nomeGetX'),
             ElevatedButton(
               onPressed: () {
-                listen();
+                storageGetX.write('nameKey', 'Gustavo Dias GetX');
+                setState(() {
+                  
+                });
               },
-              child: const Text('Remover Listen'),
+              child: const Text('Gravar nome'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                storageGetX.remove('nameKey');
+                setState(() {
+                  
+                });
+              },
+              child: const Text('Remover nome'),
+            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     listen();
+            //   },
+            //   child: const Text('Remover Listen'),
+            // ),
           ],
         ),
       ),
